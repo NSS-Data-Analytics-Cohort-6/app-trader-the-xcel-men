@@ -1,10 +1,10 @@
 SELECT 
 	DISTINCT a.name,
 	a.price,
-	ROUND((a.rating + p.rating)/2,2) AS combined_rating,
-	(CAST(a.review_count as float) + p.review_count) AS combined_rating
+	ROUND((a.rating + p.rating)/2,1) AS combined_rating,
+	(CAST(a.review_count as int) + p.review_count)/2 AS combined_review_count
 FROM app_store_apps AS a
-LEFT JOIN play_store_apps AS p
+INNER JOIN play_store_apps AS p
 ON a.name = p.name
 WHERE ROUND((a.rating + p.rating)/2,2) > 4.5
-ORDER BY (CAST(a.review_count as float) + p.review_count) DESC
+ORDER BY (CAST(a.review_count as int) + p.review_count)/2 DESC
