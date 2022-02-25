@@ -13,5 +13,5 @@ INNER JOIN
 	GROUP BY name, price) AS s
 	ON a.name = s.name
 WHERE ROUND((a.rating + s.avg_rating)/2,1) >= 4.5
-ORDER BY combined_review_count DESC, avg_rating DESC
+ORDER BY combined_review_count DESC
 LIMIT 15
