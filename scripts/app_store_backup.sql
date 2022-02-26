@@ -197,3 +197,60 @@ WHERE p.rating > 4.0 AND a.rating > 4.0 AND primary_genre = 'Sports'
 OR p.category = 'SPORTS'
 ORDER BY install_count DESC
 /* 17 apps are produced from this query.*/
+
+SELECT
+	DISTINCT p.name AS app_name,
+	p.rating AS play_rating,
+	a.rating AS app_rating,
+	TO_NUMBER(p.price, 'L99.99') AS play_price,
+	a.price AS app_price,
+	install_count
+FROM play_store_apps AS p
+INNER JOIN app_store_apps AS a
+ON p.name = a.name
+WHERE p.rating >= 4.5 AND a.rating > 4.5 
+AND p.rating IS NOT NULL AND a.rating IS NOT NULL AND p.price IS NOT NULL AND a.price IS NOT NULL AND install_count IS NOT NULL
+ORDER BY install_count DESC
+-- 8 apps where selected from this query
+
+=======================================================================================
+Main Querey 
+=======================================================================================
+SELECT
+	
+	AVG(SUM(p.price + a.price)) AS avg_price
+	SUM((avg_price) + 60000) - 12000 AS net_profit_yr
+	AVG(SUM(p.rating + a.rating)) AS avg_rating
+-- Insert 'column' AS years_of_longevity (Once calculation has been completed)
+=======================================================================================
+--Subquerey & Case Statement
+=======================================================================================
+SELECT
+	DISTINCT p.name AS app_name,
+    TO_NUMBER(p.price, 'L99.99') AS play_price,
+	a.price AS app_price,
+    p.rating AS play_rating,
+	a.rating AS app_rating,
+		CASE WHEN p.price BETWEEN 0 AND 1 THEN 10000
+		WHEN p.price > 1 THEN 'App Trader PS Purchase Price'
+		WHEN a.price BETWEEN 0 AND 1 THEN 10000
+		WHEN a.price > 1 THEN 'App Trader AS Purchase Price'
+		ELSE 'Other' END AS non_app_trader_purchase
+	FROM play_store_apps AS p
+	JOIN app_store_apps AS a
+	ON p.name = a.name
+	WHERE p.rating >= 4.0 AND a.rating > 4.0 
+	AND p.rating IS NOT NULL AND a.rating IS NOT NULL AND p.price IS NOT NULL AND a.price IS NOT NULL
+	ORDER BY net_profit_yr DESC
+	LIMIT 25
+
+
+
+--5000 * 12 (months) =  $60,000 in advertisment earnings per year
+--1000 * 12 (months) =  $12,000  in marketing cost per year (If app is in both app and play store)
+--(total purchase price (ps & app store)+ 60000) -12000 = yearly net profit
+
+/*Work on finding way to add this to querey:
+p.price * 10000 AS app_trader_ps_purchase,
+a.price * 10000 AS app_trader_as_purchase,
+Will need to CAST price as numeric or integer in order to calculate*/
