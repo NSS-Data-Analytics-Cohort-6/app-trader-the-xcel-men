@@ -14,6 +14,7 @@ FROM app_store_apps AS a
 INNER JOIN play_store_apps AS p
 ON a.name = p.name
 WHERE a.rating > 4 AND p.rating > 4;
+
 SELECT
 	DISTINCT p.name AS app_name,
 	p.rating AS play_rating,
@@ -28,7 +29,10 @@ INNER JOIN app_store_apps AS a
 ON p.name = a.name
 WHERE p.rating > 4.0 AND a.rating > 4.0
 ORDER BY install_count DESC
-LIMIT 15;*/
+LIMIT 15;
+^Megans code
+
+
 SELECT
 	DISTINCT a.name,
 	a.price,
@@ -38,7 +42,15 @@ FROM app_store_apps AS a
 INNER JOIN play_store_apps AS p
 ON a.name = p.name
 WHERE ROUND((a.rating + p.rating)/2,2) > 4.5
-ORDER BY (CAST(a.review_count as int) + p.review_count)/2 DESC
+ORDER BY (CAST(a.review_count as int) + p.review_count)/2 DESC*/
+
+SELECT 
+DISTINCT a.rating, p.name, p.price
+FROM   app_store_apps AS a
+INNER JOIN play_store_apps AS p
+ON a.name = p.name
+WHERE  a.rating IN (3.0, 3.5, 4.0, 4.5, 5.0)
+
 
 
 
