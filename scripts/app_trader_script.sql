@@ -75,4 +75,24 @@ ORDER BY install_count DESC
 LIMIT 15;
 
 --my own experimentation
-SELECT DISTINCT a.name, 
+SELECT name,
+	 price,
+	 SUM(review_count) AS review_count_tot,
+	 ROUND(AVG(rating),1) as avg_rating
+	FROM play_store_apps
+	GROUP BY name, price;
+	
+
+SELECT name, price, SUM(review_count) AS review_count_tot, ROUND(AVG(rating),1) as avg_rating
+	from play_store_apps
+	GROUP BY name, price;
+	
+
+SELECT name,
+	 price,
+	 SUM(review_count) AS review_count_tot,
+	 ROUND(AVG(rating),1) as avg_rating
+	FROM app_store_apps
+	GROUP BY name, price; 
+
+-- ^doesn't work because need to figure out the CAST function... off to DataCamp
