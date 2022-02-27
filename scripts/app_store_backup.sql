@@ -10,6 +10,7 @@ where install_count = '1,000,000,000+'
 group by name, genres, install_count
 order by genres desc;*/
 /*CAST(REPLACE(REPLACE(p.install_count,'+',''),',','') as float)*/
+/*SELECT ROUND((FLOOR(YourNumber*2.0)/2.0), 1)*/
 
 SELECT name,
 genres,
@@ -212,16 +213,17 @@ WHERE p.rating >= 4.5 AND a.rating > 4.5
 AND p.rating IS NOT NULL AND a.rating IS NOT NULL AND p.price IS NOT NULL AND a.price IS NOT NULL AND install_count IS NOT NULL
 ORDER BY install_count DESC
 -- 8 apps where selected from this query
-
+-- This query contains most of the top apps we need.
 =======================================================================================
 Main Querey 
 =======================================================================================
 SELECT
-	
+	name AS app
 	AVG(SUM(p.price + a.price)) AS avg_price
 	SUM((avg_price) + 60000) - 12000 AS net_profit_yr
 	AVG(SUM(p.rating + a.rating)) AS avg_rating
 -- Insert 'column' AS years_of_longevity (Once calculation has been completed)
+	years_of_longevity * net_profit_yr AS longterm_profit
 =======================================================================================
 --Subquerey & Case Statement
 =======================================================================================
@@ -245,6 +247,19 @@ SELECT
 	LIMIT 25
 
 
+(CASE
+			WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN 0 AND .2 THEN 1
+	 		WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN .3 AND .7 THEN 2 
+	 		WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN .8 AND 1.2 THEN 3
+	 		WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN 1.3 AND 1.7 THEN 4
+	 		WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN 1.8 AND 2.2 THEN 5
+	 		WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN 2.3 AND 2.7 THEN 6
+	 		WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN 2.8 AND 3.2 THEN 7
+	 		WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN 3.3 AND 3.7 THEN 8
+	 		WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN 3.8 AND 4.2 THEN 9
+	 		WHEN ROUND((FLOOR((p.rating + a.rating)*2.0)/2.0),1) BETWEEN 4.3 AND 4.7 THEN 10
+	 		ELSE 11 END) AS years_of_longevity,
+	 												
 
 --5000 * 12 (months) =  $60,000 in advertisment earnings per year
 --1000 * 12 (months) =  $12,000  in marketing cost per year (If app is in both app and play store)
