@@ -18,7 +18,7 @@ FROM
 	(SELECT 
 		DISTINCT a.name,
 		(a.price + CAST(REPLACE(s.price,'$','') AS float)/2) as avg_price, 
-		ROUND((a.rating + s.avg_rating)/2,1) AS avg_rating,
+		ROUND((a.rating + s.avg_rating)/2,2) AS avg_rating,
 		a.content_rating,
 --=======================================================================================================================================================
  -- The case statement below handles getting the longevity_in_years for each app.  I could not figure out how to round to the nearest .5.
@@ -70,7 +70,7 @@ FROM
 	GROUP BY name, price) AS s -- this is the alias used for the inner join of this table to the app_store_apps table               
 	ON a.name = s.name) AS main          
 --========================================================================================================================================================
- --the ') main' after the on clause is what closed the main subquery which allow it to be referenced by the outer query that is at the top of this script.
+ --the ') AS main' after the on clause is what closed the main subquery which allow it to be referenced by the outer query that is at the top of this script.
 --=======================================================================================================================================================
 ORDER BY total_profit DESC, avg_rating DESC
 
